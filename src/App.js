@@ -23,9 +23,6 @@ function App() {
       <Router>
         {isLoggedIn ? (
           <>
-            
-
-            <Link to="/">Home</Link>
             <button onClick={handleLogout}>Logout</button>
             <Routes>
               <Route path="/" element={<Home />} />
