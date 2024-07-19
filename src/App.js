@@ -1,23 +1,45 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from 'react';
+import { Link, Route, Routes, BrowserRouter as Router } from 'react-router-dom';
+import LoginSignup from './components/LoginSignup';
+import Home from './components/Home';
+import Owner from './components/Owner';
+import Customer from './components/Customer';
 
 function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    setIsLoggedIn(!!token);
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setIsLoggedIn(false);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app-container">
+      <Router>
+        {isLoggedIn ? (
+          <>
+            
+
+            <Link to="/">Home</Link>
+            <button onClick={handleLogout}>Logout</button>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/owner" element={<Owner />} />
+              <Route path="/customer" element={<Customer />} />
+
+            </Routes>
+          </>
+        ) : (
+          <>
+            <LoginSignup setIsLoggedIn={setIsLoggedIn} />
+          </>
+        )}
+      </Router>
     </div>
   );
 }
