@@ -1,37 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import Owner from './Owner'
+import Customer from './Customer'
+import { useSelector } from 'react-redux';
 
 const Home = () => {
-    const [role, setRole] = useState('');
-
-    const defineRole = (rolee) => {
-        setRole(rolee);
-        localStorage.setItem('purpose', rolee);
-    };
-
-    useEffect(() => {
-        const purpose = localStorage.getItem('purpose');
-        setRole(purpose)
-      }, []);
-
+    // const role = useSelector((state) => state.userData.role)
+    const role = localStorage.getItem("role")
     return (
         <div>
-            {role === '' ? (
-                <>
-                    <h1>Welcome to the Local Shop</h1>
-                    <h2>Choose Your Role</h2>
-                    <div>
-                        <button onClick={() => defineRole('owner')}>As a Shop Owner</button><br />
-                        <button onClick={() => defineRole('customer')}>As a Customer</button>
-                    </div>
-                </>
-            ) : (
-                role === 'owner' ? (
-                    <h1>Welcome owner</h1>
-                ) : (
-                    <h1>Welcome customer</h1>
+            {role === 'Owner' ? (
+                    <Owner />
+                ) : role==='Customer'? (
+                    <Customer/>
+                ):(
+                    <div><h1>Choose a role</h1></div>
                 )
-            )}
+            }
         </div>
     );
 };

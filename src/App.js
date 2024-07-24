@@ -2,11 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Link, Route, Routes, BrowserRouter as Router } from 'react-router-dom';
 import LoginSignup from './components/LoginSignup';
 import Home from './components/Home';
-import Owner from './components/Owner';
-import Customer from './components/Customer';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -14,7 +13,7 @@ function App() {
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
+    localStorage.clear();
     setIsLoggedIn(false);
   };
 
@@ -26,9 +25,6 @@ function App() {
             <button onClick={handleLogout}>Logout</button>
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/owner" element={<Owner />} />
-              <Route path="/customer" element={<Customer />} />
-
             </Routes>
           </>
         ) : (

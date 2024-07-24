@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useDispatch } from 'react-redux'
+import { userRole } from '../Redux/Slicer'
 
 const LoginSignup = ({ setIsLoggedIn }) => {
+  const dispatch = useDispatch();
+
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
+  const [role, setRole] = useState('');
   const [message, setMessage] = useState('');
 
   const toggleForm = () => {
@@ -13,6 +18,7 @@ const LoginSignup = ({ setIsLoggedIn }) => {
     setEmail('');
     setPassword('');
     setName('');
+    setRole('')
     setMessage('');
   };
 
@@ -20,7 +26,10 @@ const LoginSignup = ({ setIsLoggedIn }) => {
     try {
       const response = await axios.post('http://localhost:7000/loginShop', { email, password });
       setMessage(response.data.message);
-      localStorage.setItem('token', response.data.token); 
+      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('email', email);
+      localStorage.setItem('role', response.data.role);
+      // dispatch(userRole(response.data.role))
       setIsLoggedIn(true);
     } catch (error) {
       setMessage(error.response?.data?.error || 'Login failed');
@@ -29,12 +38,16 @@ const LoginSignup = ({ setIsLoggedIn }) => {
 
   const handleSignup = async () => {
     try {
-      await axios.post('http://localhost:7000/addShop', { email, password, shopName: name });
+      await axios.post('http://localhost:7000/addShop', { email, password, shopName: name, role });
       setMessage('Signup successful');
-      setIsLogin(true); 
+      setIsLogin(true);
     } catch (error) {
       setMessage(error.response?.data?.error || 'Signup failed');
     }
+  };
+
+  const handleRoleChange = (event) => {
+    setRole(event.target.value);
   };
 
   return (
@@ -106,6 +119,21 @@ const LoginSignup = ({ setIsLoggedIn }) => {
               required
             />
           </div>
+          <input
+            type="radio"
+            name="role"
+            value="Customer"
+            onChange={handleRoleChange}
+          />
+          <label>Customer</label>
+          <input
+            type="radio"
+            name="role"
+            value="Owner"
+            onChange={handleRoleChange}
+          />
+          <label>Owner</label>
+          <p>Selected Role: {role}</p>
           <button onClick={handleSignup}>Sign Up</button>
           <p>
             Already have an account? <button onClick={toggleForm}>Login</button>
