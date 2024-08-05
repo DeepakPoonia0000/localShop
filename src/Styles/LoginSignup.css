@@ -1,0 +1,66 @@
+*{
+    font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+
+.login-signup-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    line-height: 40px;
+    background: url('../Assets/MPE.gif');
+    background-blend-mode: soft-light;
+    background-repeat: no-repeat;
+    background-size: 100vw;
+    opacity: 1.9;
+    @media (max-width:426px) {
+        background: url('../Assets/loginone.gif');
+    }
+}
+
+.login-form{
+    text-align: center;
+    background: white;
+    width: 50%;
+    opacity: 0.8;
+    border-radius: 10%;
+    @media (max-width:426px) {
+        width: 100%;
+    }
+}
+
+.signup-form{
+    text-align: center;
+    background: white;
+    width: 50%;
+    opacity: 0.8;
+    border-radius: 10%;
+    overflow: scroll;
+    scrollbar-width: none;
+    @media (max-width:426px) {
+        width: 100%;
+    }
+}
+
+.login-signup-button{
+    margin-top: 20px;
+    font-size: larger;
+    background-color: aquamarine;
+    font-size: large;
+}
+
+.input-container{
+    display: grid;
+    grid-template-columns: 4fr 8fr;
+}
+
+.label-names{
+    font-size: x-large;
+}
+
+.input-fields{
+width: 100%;
+@media (max-width:426px) {
+    width: 90%;
+}
+}

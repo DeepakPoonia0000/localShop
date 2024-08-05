@@ -8,8 +8,8 @@ const Owner = () => {
     productImage: '',
     productName: '',
     description: '',
-    colors: [],
-    size: [],
+    colors: '',
+    size: '',
     price: ''
   });
 
@@ -35,10 +35,10 @@ const Owner = () => {
       const token = localStorage.getItem('token');
       const response = await axios.delete('http://localhost:7000/delete', {
         headers: { Authorization: token },
-        data: { objectId }
+        data: { productId: objectId } 
       });
       console.log(response.data.message);
-      getProducts(); // Refresh products list after deletion
+      getProducts(); 
     } catch (error) {
       console.log(error.response?.data?.error || 'Failed to delete product');
     }
@@ -48,7 +48,7 @@ const Owner = () => {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.put('http://localhost:7000/update', {
-        objectId: form.objectId,
+        productId: form.objectId,
         productImage: form.productImage.split(',').map(item => item.trim()),
         productName: form.productName,
         description: form.description,
@@ -64,11 +64,11 @@ const Owner = () => {
         productImage: '',
         productName: '',
         description: '',
-        colors: [],
-        size: [],
+        colors: '',
+        size: '',
         price: ''
       });
-      getProducts(); // Refresh products list after update
+      getProducts();
     } catch (error) {
       console.log(error.response?.data?.error || 'Failed to update product');
     }
@@ -93,11 +93,11 @@ const Owner = () => {
         productImage: '',
         productName: '',
         description: '',
-        colors: [],
-        size: [],
+        colors: '',
+        size: '',
         price: ''
       });
-      getProducts(); 
+      getProducts();
     } catch (error) {
       console.log(error.response?.data?.error || 'Failed to add product');
     }

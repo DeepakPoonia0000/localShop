@@ -1,22 +1,22 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 const Customer = () => {
-  const [products, setProducts] = useState([]);
+  const [shops, setShops] = useState([]);
 
   useEffect(() => {
-    getProducts();
+    getShops();
   }, []);
 
-  const getProducts = async () => {
+  const getShops = async () => {
     try {
-      const token = localStorage.getItem('token')
-      const response = await axios.get('http://localhost:7000/details',
-        {
-          headers: { Authorization: token }
-        });
+      const token = localStorage.getItem('token');
+      const response = await axios.get('http://localhost:7000/shops', {
+        headers: { Authorization: token }
+      });
       console.log(response);
-      setProducts(response.data);
+      setShops(response.data);
     } catch (error) {
       console.log(error.response?.data?.error || 'Product Fetching Failed');
     }
@@ -25,26 +25,18 @@ const Customer = () => {
   return (
     <div>
       <h1>Customer</h1>
-      {products.length === 0 ? (
-        <p>No products available.</p>
-      ) : (
-        products.map((prod, index) => (
-          <div key={index}>
-            <h2>{prod.productName}</h2>
-            <p>{prod.description}</p>
-            <p>Price: Rs. {prod.price}</p>
-            <p>Colors: {prod.colors.join(', ')}</p>
-            <p>Sizes: {prod.size.join(', ')}</p>
-            <div>
-              {prod.productImage.map((image, imgIndex) => (
-                <img key={imgIndex} src={image} alt={prod.productName} style={{ width: '100px' }} />
-              ))}
-            </div>
+      {shops.map((shop, index) => (
+
+        <Link key={index} to={`shopProducts?shopName=${shop.shopName}`}>
+          <div>
+            <h1>{shop.shopName}</h1>
+            <h2>{shop.address}</h2>
+            <p>{shop.pincode}</p>
           </div>
-        ))
-      )}
+        </Link>
+      ))}
     </div>
   );
-}
+};
 
 export default Customer;

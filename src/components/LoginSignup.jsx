@@ -1,146 +1,104 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useDispatch } from 'react-redux'
-import { userRole } from '../Redux/Slicer'
 
-const LoginSignup = ({ setIsLoggedIn }) => {
-  const dispatch = useDispatch();
-
-  const [isLogin, setIsLogin] = useState(true);
+const LoginSignup = ({setToken}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [name, setName] = useState('');
   const [role, setRole] = useState('');
-  const [message, setMessage] = useState('');
-
-  const toggleForm = () => {
-    setIsLogin(!isLogin);
-    setEmail('');
-    setPassword('');
-    setName('');
-    setRole('')
-    setMessage('');
-  };
+  const [name, setName] = useState('');
+  const [shopName, setShopName] = useState('');
+  const [pincode, setPincode] = useState('');
+  const [address, setAddress] = useState('');
+  const [location, setLocation] = useState('');
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post('http://localhost:7000/loginShop', { email, password });
-      setMessage(response.data.message);
+      const response = await axios.post('http://localhost:7000/loginUser', { email, password });
       localStorage.setItem('token', response.data.token);
-      localStorage.setItem('email', email);
+      setToken(response.data.token)
       localStorage.setItem('role', response.data.role);
-      // dispatch(userRole(response.data.role))
-      setIsLoggedIn(true);
+      console.log(response)
     } catch (error) {
-      setMessage(error.response?.data?.error || 'Login failed');
+      console.error('Login failed:', error);
+      alert('Login failed');
     }
   };
 
   const handleSignup = async () => {
+    const userData = { email, password, role };
+    if (role === 'shop') {
+      userData.role = 'R@7yU5vK*9#L^eP&1!sF8$2B0oQmWzD4xJ%pC3gN#6T$Y'
+      Object.assign(userData, { name, shopName, pincode, address, location });
+    } else{
+      userData.role = 'jI$3Mv@8kP&lD6G#9oK!uS^zW0YdR*L1fT7W#bNp8qXvE$2'
+    }
     try {
-      await axios.post('http://localhost:7000/addShop', { email, password, shopName: name, role });
-      setMessage('Signup successful');
-      setIsLogin(true);
+      const response = await axios.post('http://localhost:7000/addUser', userData);
+      localStorage.setItem('role', response.data.newUser.role);
+      console.log(response.data.newUser)
+      // alert('Signup successful');
     } catch (error) {
-      setMessage(error.response?.data?.error || 'Signup failed');
+      console.error('Signup failed:', error);
+      // alert('Signup failed');
     }
   };
 
-  const handleRoleChange = (event) => {
-    setRole(event.target.value);
-  };
-
   return (
-    <div className="login-signup-container">
-      {isLogin ? (
-        <div className="login-form">
-          <h2>Login</h2>
-          <div>
-            <label htmlFor="email">Email:</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-          <div>
-            <label htmlFor="password">Password:</label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-          <button onClick={handleLogin}>Login</button>
-          <p>
-            Don't have an account? <button onClick={toggleForm}>Sign up</button>
-          </p>
-          {message && <p>{message}</p>}
-        </div>
-      ) : (
-        <div className="signup-form">
-          <h2>Sign Up</h2>
-          <div>
-            <label htmlFor="name">Name:</label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-            />
-          </div>
-          <div>
-            <label htmlFor="email">Email:</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-          <div>
-            <label htmlFor="password">Password:</label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
+    <div>
+      <h1>Login/Signup</h1>
+      <input
+        type="email"
+        placeholder="Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
+      <input
+        type="password"
+        placeholder="Password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
+      <select value={role} onChange={(e) => setRole(e.target.value)}>
+        <option value="">Select Role</option>
+        <option value="customer">Customer</option>
+        <option value="shop">Shop</option>
+      </select>
+      {role === 'shop' && (
+        <>
           <input
-            type="radio"
-            name="role"
-            value="Customer"
-            onChange={handleRoleChange}
+            type="text"
+            placeholder="Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
           />
-          <label>Customer</label>
           <input
-            type="radio"
-            name="role"
-            value="Owner"
-            onChange={handleRoleChange}
+            type="text"
+            placeholder="Shop Name"
+            value={shopName}
+            onChange={(e) => setShopName(e.target.value)}
           />
-          <label>Owner</label>
-          <p>Selected Role: {role}</p>
-          <button onClick={handleSignup}>Sign Up</button>
-          <p>
-            Already have an account? <button onClick={toggleForm}>Login</button>
-          </p>
-          {message && <p>{message}</p>}
-        </div>
+          <input
+            type="text"
+            placeholder="Pincode"
+            value={pincode}
+            onChange={(e) => setPincode(e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder="Address"
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder="Location"
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+          />
+        </>
       )}
+      <button onClick={handleLogin}>Login</button>
+      <button onClick={handleSignup}>Signup</button>
     </div>
   );
 };
