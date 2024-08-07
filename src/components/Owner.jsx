@@ -38,7 +38,7 @@ const Owner = () => {
         data: { productId: objectId } 
       });
       console.log(response.data.message);
-      getProducts(); 
+      getProducts();
     } catch (error) {
       console.log(error.response?.data?.error || 'Failed to delete product');
     }
