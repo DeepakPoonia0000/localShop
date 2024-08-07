@@ -35,7 +35,7 @@ const Owner = () => {
       const token = localStorage.getItem('token');
       const response = await axios.delete('http://localhost:7000/delete', {
         headers: { Authorization: token },
-        data: { productId: objectId } 
+        data: { productId: objectId }
       });
       console.log(response.data.message);
       getProducts();

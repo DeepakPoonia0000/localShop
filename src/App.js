@@ -38,9 +38,12 @@ const App = () => {
         <button onClick={handleLogout}>Log Out</button>
         <Routes>
           <Route path="/" element={token ? <Navigate to="/home" /> : <LoginSignup setToken={setToken} />} />
+
           <Route path="/home" element={token ? <Home /> : <Navigate to="/" />} />
+
           <Route path="/yourProducts" element={token ? <Owner /> : <Navigate to="/" />} />
-          <Route path="/showProducts" element={token ? <CustomerProducts /> : <Navigate to="/" />} />
+
+          <Route path="/showProducts" element={<CustomerProducts />} />
         </Routes>
       </div>
     </Router>

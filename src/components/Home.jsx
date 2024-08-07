@@ -147,11 +147,14 @@ const Home = () => {
   };
 
   const lastShopElementRef = useCallback((node) => {
+    console.log("node is this =>", node)
     if (loading) return;
     if (observer.current) observer.current.disconnect();
     observer.current = new IntersectionObserver((entries) => {
+      console.log("enteries is this =>", entries);
       if (entries[0].isIntersecting && hasMore) {
         setPage((prevPage) => prevPage + 1);
+        console.log("page is this =>", page)
       }
     });
     if (node) observer.current.observe(node);
@@ -194,9 +197,9 @@ const Home = () => {
       />
       <button onClick={handlePincodeSearch}>Search by Pincode</button>
       {error && <p>{error}</p>}
-      <ul style={{width:"300px"}}>
+      <ul style={{ width: "300px" }}>
         {shops.map((shop, index) => (
-          <Link to={`/showProducts?shopName=${shop.shopName}`} key={index} style={{width:"300px"}}>
+          <Link to={`/showProducts?shopName=${shop.shopName}`} key={index} style={{ width: "300px" }}>
             <li ref={index === shops.length - 1 ? lastShopElementRef : null}>
               <h2>{shop.shopName}</h2>
               <p>Address: {shop.address}</p>
