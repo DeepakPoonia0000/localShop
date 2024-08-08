@@ -147,14 +147,14 @@ const Home = () => {
   };
 
   const lastShopElementRef = useCallback((node) => {
-    console.log("node is this =>", node)
+    // console.log("node is this =>", node)
     if (loading) return;
     if (observer.current) observer.current.disconnect();
     observer.current = new IntersectionObserver((entries) => {
-      console.log("enteries is this =>", entries);
+      // console.log("enteries is this =>", entries);
       if (entries[0].isIntersecting && hasMore) {
         setPage((prevPage) => prevPage + 1);
-        console.log("page is this =>", page)
+        // console.log("page is this =>", page)
       }
     });
     if (node) observer.current.observe(node);
@@ -199,13 +199,23 @@ const Home = () => {
       {error && <p>{error}</p>}
       <ul style={{ width: "300px" }}>
         {shops.map((shop, index) => (
+          <>
           <Link to={`/showProducts?shopName=${shop.shopName}`} key={index} style={{ width: "300px" }}>
             <li ref={index === shops.length - 1 ? lastShopElementRef : null}>
               <h2>{shop.shopName}</h2>
               <p>Address: {shop.address}</p>
               <p>Pincode: {shop.pincode}</p>
+              
             </li>
           </Link>
+          <a
+          href={`https://www.google.com/maps?q=${shop.location.latitude},${shop.location.longitude}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          View on Google Maps
+        </a>
+        </>
         ))}
       </ul>
       {loading && <p>Loading more shops...</p>}
